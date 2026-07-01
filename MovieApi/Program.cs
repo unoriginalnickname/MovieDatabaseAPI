@@ -4,13 +4,21 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 #region Controllers + JSON
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(MoviesController).Assembly)
-    .AddNewtonsoftJson();
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.NullValueHandling =
+            Newtonsoft.Json.NullValueHandling.Ignore; //ignores null, otherwise will send empty error messages
+        options.SerializerSettings.DefaultValueHandling =
+            Newtonsoft.Json.DefaultValueHandling.Ignore;
+    });
+
 #endregion
 
 #region OpenAPI
