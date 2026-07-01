@@ -21,14 +21,8 @@ public class ReviewController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Movie not found.</response>
     [HttpGet("movies/{movieId}/reviews")]
     public async Task<IActionResult> GetByMovieId(int movieId, [FromQuery] PagingQuery query)
-    {
-        var movie = await serviceManager.MovieService.GetByIdAsync(movieId);
+        => Ok(await serviceManager.ReviewService.GetByMovieIdAsync(movieId, query));
 
-        if (movie == null)
-            return Problem(detail: $"No movie found with id: {movieId}", statusCode: StatusCodes.Status404NotFound);
-
-        return Ok(await serviceManager.ReviewService.GetByMovieIdAsync(movieId, query));
-    }
 
     /// <summary>Gets a review by ID.</summary>
     /// <param name="reviewId">Review ID.</param>
@@ -37,13 +31,8 @@ public class ReviewController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Review not found.</response>
     [HttpGet("reviews/{reviewId}")]
     public async Task<IActionResult> GetById(int reviewId)
-    {
-        var review = await serviceManager.ReviewService.GetByIdAsync(reviewId);
+        => this.MapResult(await serviceManager.ReviewService.GetByIdAsync(reviewId));
 
-        return review == null
-            ? Problem(detail: $"No review found with id: {reviewId}", statusCode: StatusCodes.Status404NotFound)
-            : Ok(review);
-    }
 
     /// <summary>Deletes a review.</summary>
     /// <param name="reviewId">Review ID.</param>
@@ -51,11 +40,5 @@ public class ReviewController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Review not found.</response>
     [HttpDelete("reviews/{reviewId}")]
     public async Task<IActionResult> Delete(int reviewId)
-    {
-        var result = await serviceManager.ReviewService.DeleteAsync(reviewId);
-
-        return result.Success
-            ? NoContent()
-            : Problem(detail: result.Error, statusCode: StatusCodes.Status404NotFound);
-    }
+        => this.MapResult(await serviceManager.ReviewService.DeleteAsync(reviewId));
 }

@@ -20,13 +20,8 @@ public class ActorsController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Actor not found.</response>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
-    {
-        var actor = await serviceManager.ActorService.GetByIdAsync(id);
+        => this.MapResult(await serviceManager.ActorService.GetByIdAsync(id), $"No actor found with id: {id}");
 
-        return actor == null
-            ? Problem(detail: $"No actor found with id: {id}", statusCode: StatusCodes.Status404NotFound)
-            : Ok(actor);
-    }
 
     /// <summary>Creates a new actor.</summary>
     /// <param name="dto">Actor creation data.</param>
@@ -35,17 +30,8 @@ public class ActorsController(IServiceManager serviceManager) : ControllerBase
     /// <response code="400">Invalid request.</response>
     [HttpPost]
     public async Task<IActionResult> Create(CreateActorDto dto)
-    {
-        var result = await serviceManager.ActorService.CreateAsync(dto);
+        => this.MapResult(await serviceManager.ActorService.CreateAsync(dto));
 
-        if (!result.Success)
-            return Problem(detail: result.Error, statusCode: StatusCodes.Status400BadRequest);
-
-        return CreatedAtAction(
-            nameof(GetById),
-            new { id = result.Data!.Id },
-            result.Data);
-    }
 
     /// <summary>Updates an existing actor.</summary>
     /// <param name="id">Actor ID.</param>
@@ -54,13 +40,8 @@ public class ActorsController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Actor not found.</response>
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, UpdateActorDto dto)
-    {
-        var result = await serviceManager.ActorService.UpdateAsync(id, dto);
+        => this.MapResult(await serviceManager.ActorService.UpdateAsync(id, dto));
 
-        return result.Success
-            ? NoContent()
-            : Problem(detail: result.Error, statusCode: StatusCodes.Status404NotFound);
-    }
 
     /// <summary>Deletes an actor.</summary>
     /// <param name="id">Actor ID.</param>
@@ -68,11 +49,5 @@ public class ActorsController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Actor not found.</response>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
-    {
-        var result = await serviceManager.ActorService.DeleteAsync(id);
-
-        return result.Success
-            ? NoContent()
-            : Problem(detail: result.Error, statusCode: StatusCodes.Status404NotFound);
-    }
+        => this.MapResult(await serviceManager.ActorService.DeleteAsync(id));
 }

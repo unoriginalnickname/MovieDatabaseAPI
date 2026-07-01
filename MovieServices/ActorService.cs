@@ -1,21 +1,37 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-public class ActorService(IUnitOfWork uow, IMapper mapper) : IActorService
+public class ActorService(IUnitOfWork uow, IMapper mapper, ILogger<ActorService> logger) : IActorService
 {
     private readonly IConfigurationProvider _mapperConfig = mapper.ConfigurationProvider;
 
-    public async Task<PagedResult<ActorDto>> GetAllAsync(ActorQuery query)
-        => await uow.Actors.Query()
+    public async Task<ServiceResult<PagedResult<ActorDto>>> GetAllAsync(ActorQuery query)
+    {
+        var result = await uow.Actors.Query()
             .ProjectTo<ActorDto>(_mapperConfig)
             .ToPagedResultAsync(query.Page, query.PageSize);
 
-    public async Task<ActorDto?> GetByIdAsync(int id)
-        => await uow.Actors.Query()
+        return ServiceResultFactory.Ok(result);
+    }
+
+    public async Task<ServiceResult<ActorDto>> GetByIdAsync(int id)
+    {
+        var actor = await uow.Actors.Query()
             .Where(x => x.Id == id)
             .ProjectTo<ActorDto>(_mapperConfig)
             .FirstOrDefaultAsync();
+
+        if (actor == null)
+            return ServiceResultFactory.Fail<ActorDto>(
+                logger,
+                ErrorTypeEnum.NotFound,
+                "Actor not found",
+                nameof(GetByIdAsync));
+
+        return ServiceResultFactory.Ok(actor);
+    }
 
     public async Task<ServiceResult<ActorDto>> CreateAsync(CreateActorDto dto)
     {
@@ -24,7 +40,7 @@ public class ActorService(IUnitOfWork uow, IMapper mapper) : IActorService
         uow.Actors.Add(actor);
         await uow.CompleteAsync();
 
-        return ServiceResult<ActorDto>.Ok(mapper.Map<ActorDto>(actor));
+        return ServiceResultFactory.Ok(mapper.Map<ActorDto>(actor));
     }
 
     public async Task<ServiceResult<ActorDto>> UpdateAsync(int id, UpdateActorDto dto)
@@ -32,14 +48,17 @@ public class ActorService(IUnitOfWork uow, IMapper mapper) : IActorService
         var actor = await uow.Actors.GetAsync(id);
 
         if (actor == null)
-            return ServiceResult<ActorDto>.Fail("Actor not found");
+            return ServiceResultFactory.Fail<ActorDto>(
+                logger,
+                ErrorTypeEnum.NotFound,
+                "Actor not found",
+                nameof(UpdateAsync));
 
         mapper.Map(dto, actor);
 
-        uow.Actors.Update(actor);
         await uow.CompleteAsync();
 
-        return ServiceResult<ActorDto>.Ok(mapper.Map<ActorDto>(actor));
+        return ServiceResultFactory.Ok(mapper.Map<ActorDto>(actor));
     }
 
     public async Task<ServiceResult> DeleteAsync(int id)
@@ -47,11 +66,15 @@ public class ActorService(IUnitOfWork uow, IMapper mapper) : IActorService
         var actor = await uow.Actors.GetAsync(id);
 
         if (actor == null)
-            return ServiceResult.Fail("Actor not found");
+            return ServiceResultFactory.Fail(
+                logger,
+                ErrorTypeEnum.NotFound,
+                "Actor not found",
+                nameof(DeleteAsync));
 
         uow.Actors.Remove(actor);
         await uow.CompleteAsync();
 
-        return ServiceResult.Ok();
+        return ServiceResultFactory.Ok();
     }
 }

@@ -1,14 +1,16 @@
-﻿
-public interface IReviewService
+﻿public interface IReviewService
 {
+    Task<ServiceResult<PagedResult<ReviewDto>>> GetAllAsync(PagingQuery query);
 
-    Task<PagedResult<ReviewDto>> GetAllAsync(PagingQuery query);
-    public Task<ReviewDto?> GetByIdAsync(int reviewId);
-    Task<PagedResult<ReviewDto>> GetByMovieIdAsync(
+    Task<ServiceResult<ReviewDto>> GetByIdAsync(int reviewId);
+
+    Task<ServiceResult<PagedResult<ReviewDto>>> GetByMovieIdAsync(
         int movieId,
         PagingQuery query);
+
     Task<ServiceResult<ReviewDto>> CreateAsync(CreateReviewDto dto);
 
     Task<ServiceResult> DeleteAsync(int reviewId);
-    public Task<ServiceResult> AddReviewAsync(int movieId, CreateReviewDto dto);
+
+    Task<ServiceResult> AddReviewAsync(int movieId, CreateReviewDto dto);
 }

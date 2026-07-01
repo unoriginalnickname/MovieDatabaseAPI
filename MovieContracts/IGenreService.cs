@@ -1,8 +1,8 @@
 ﻿public interface IGenreService
 {
-    Task<PagedResult<GenreDto>> GetAllAsync(GenreQuery query);
+    Task<ServiceResult<PagedResult<GenreDto>>> GetAllAsync(GenreQuery query);
 
-    Task<GenreDto?> GetByIdAsync(int id);
+    Task<ServiceResult<GenreDto>> GetByIdAsync(int id);
 
     Task<ServiceResult<GenreDto>> CreateAsync(CreateGenreDto dto);
 
@@ -10,4 +10,3 @@
 
     Task<ServiceResult> DeleteAsync(int id);
 }
-

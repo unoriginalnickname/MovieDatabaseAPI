@@ -20,13 +20,9 @@ public class GenresController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Genre not found.</response>
     [HttpGet("{genreId}")]
     public async Task<IActionResult> GetById(int genreId)
-    {
-        var genre = await serviceManager.GenreService.GetByIdAsync(genreId);
+        => this.MapResult(await serviceManager.GenreService.GetByIdAsync(genreId));
 
-        return genre == null
-            ? Problem(detail: $"No genre found with id: {genreId}", statusCode: StatusCodes.Status404NotFound)
-            : Ok(genre);
-    }
+
 
     /// <summary>Creates a new genre.</summary>
     /// <param name="dto">Genre creation data.</param>
@@ -34,15 +30,8 @@ public class GenresController(IServiceManager serviceManager) : ControllerBase
     /// <response code="200">Genre created successfully.</response>
     [HttpPost]
     public async Task<IActionResult> Create(CreateGenreDto dto)
-    {
-        var result = await serviceManager.GenreService.CreateAsync(dto);
-        if (!result.Success)
-            return Problem(detail: result.Error, statusCode: StatusCodes.Status400BadRequest);
+        => this.MapResult(await serviceManager.GenreService.CreateAsync(dto));
 
-        return CreatedAtAction(nameof(GetById),
-            new { genreId = result.Data!.Id },
-            result.Data);
-    }
 
     /// <summary>Updates an existing genre.</summary>
     /// <param name="genreId">Genre ID.</param>
@@ -52,13 +41,8 @@ public class GenresController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Genre not found.</response>
     [HttpPut("{genreId}")]
     public async Task<IActionResult> Update(int genreId, UpdateGenreDto dto)
-    {
-        var result = await serviceManager.GenreService.UpdateAsync(genreId, dto);
+        => this.MapResult(await serviceManager.GenreService.UpdateAsync(genreId, dto));
 
-        return result.Success
-            ? Ok(result.Data)
-            : Problem(detail: result.Error, statusCode: StatusCodes.Status404NotFound);
-    }
 
     /// <summary>Deletes a genre.</summary>
     /// <param name="genreId">Genre ID.</param>
@@ -66,11 +50,5 @@ public class GenresController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Genre not found.</response>
     [HttpDelete("{genreId}")]
     public async Task<IActionResult> Delete(int genreId)
-    {
-        var result = await serviceManager.GenreService.DeleteAsync(genreId);
-
-        return result.Success
-            ? NoContent()
-            : Problem(detail: result.Error, statusCode: StatusCodes.Status404NotFound);
-    }
+        => this.MapResult(await serviceManager.GenreService.DeleteAsync(genreId));
 }

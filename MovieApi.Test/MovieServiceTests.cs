@@ -30,7 +30,10 @@ public class MovieServiceTests
         await ctx.SaveChangesAsync();
 
         Assert.True(ctx.Movies.Count() == initialAmountOfMovies + 1);
-        var addedMovie = await _movieService.GetDetailsByIdAsync(1);
+        var result = await _movieService.GetDetailsByIdAsync(1);
+
+        var addedMovie = result.Data;
+
         Assert.True(addedMovie.AddedAtDateTime != default);
 
         Assert.True(addedMovie.ChangedAtDateTime == default);

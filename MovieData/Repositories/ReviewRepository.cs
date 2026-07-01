@@ -39,33 +39,19 @@ public class ReviewRepository(MovieDbContext context) : IReviewRepository
         => await context.Reviews
             .FirstOrDefaultAsync(r => r.Id == reviewId && r.MovieId == movieId);
 
-
-
     public async Task<IEnumerable<Review>> GetAllAsync()
     {
         return await context.Reviews.ToListAsync();
     }
-
     public async Task<Review?> GetAsync(int id)
     {
         return await context.Reviews.FindAsync(id);
-    }
-
-    public async Task<bool> AnyAsync(int id)
-    {
-        return await context.Reviews.AnyAsync(r => r.Id == id);
     }
 
     public void Add(Review review)
     {
         context.Reviews.Add(review);
     }
-
-    public void Update(Review review)
-    {
-        context.Reviews.Update(review);
-    }
-
     public void Remove(Review review)
     {
         context.Reviews.Remove(review);
