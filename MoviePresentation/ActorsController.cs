@@ -10,7 +10,7 @@ public class ActorsController(IServiceManager serviceManager) : ControllerBase
     /// <response code="200">Actors returned successfully.</response>
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] ActorQuery query)
-        => Ok(await serviceManager.ActorService.GetAllAsync(query));
+        => this.MapResult(await serviceManager.ActorService.GetAllAsync(query));
 
     /// <summary>Gets an actor by ID.</summary>
     /// <param name="id">Actor ID.</param>

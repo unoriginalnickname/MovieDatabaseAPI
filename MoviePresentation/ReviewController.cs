@@ -11,7 +11,7 @@ public class ReviewController(IServiceManager serviceManager) : ControllerBase
     /// <response code="200">Reviews returned successfully.</response>
     [HttpGet("reviews")]
     public async Task<IActionResult> GetAll([FromQuery] PagingQuery query)
-        => Ok(await serviceManager.ReviewService.GetAllAsync(query));
+        => this.MapResult(await serviceManager.ReviewService.GetAllAsync(query));
 
     /// <summary>Gets reviews for a specific movie.</summary>
     /// <param name="movieId">Movie ID.</param>
@@ -21,7 +21,7 @@ public class ReviewController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Movie not found.</response>
     [HttpGet("movies/{movieId}/reviews")]
     public async Task<IActionResult> GetByMovieId(int movieId, [FromQuery] PagingQuery query)
-        => Ok(await serviceManager.ReviewService.GetByMovieIdAsync(movieId, query));
+        => this.MapResult(await serviceManager.ReviewService.GetByMovieIdAsync(movieId, query));
 
 
     /// <summary>Gets a review by ID.</summary>

@@ -11,7 +11,10 @@ public class GenresController(IServiceManager serviceManager) : ControllerBase
     /// <response code="200">Genres returned successfully.</response>
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GenreQuery query)
-        => Ok(await serviceManager.GenreService.GetAllAsync(query));
+        => this.MapResult(await serviceManager.GenreService.GetAllAsync(query));
+
+
+
 
     /// <summary>Gets a genre by ID.</summary>
     /// <param name="genreId">Genre ID.</param>
