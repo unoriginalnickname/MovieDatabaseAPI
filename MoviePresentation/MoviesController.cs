@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 
-
-[Route("api/v{version:apiVersion}/movies")]  // https://localhost:7259/api/v1/products
-[ApiVersion("1.0")]
-[ApiVersion("2.0")]
+[Route("api/[controller]")] 
+//[Route("api/v{version:apiVersion}/movies")]  // https://localhost:7259/api/v1/products
+//[ApiVersion("1.0")]
+//[ApiVersion("2.0")]
 [ApiController]
 public class MoviesController(IServiceManager serviceManager, ILogger<MoviesController> _logger, LinkGenerator links) : ControllerBase
 {
@@ -15,8 +15,8 @@ public class MoviesController(IServiceManager serviceManager, ILogger<MoviesCont
     /// <param name="movieId">Movie ID.</param>
     /// <response code="200">Movie found.</response>
     /// <response code="404">Movie not found.</response>
+
     [HttpGet("{movieId}")]
-    [MapToApiVersion("1.0")]
     public async Task<IActionResult> GetMovieV1(int movieId)
     {
         _logger.LogInformation("Getting movie {MovieId} (v1)", movieId);
@@ -55,8 +55,8 @@ public class MoviesController(IServiceManager serviceManager, ILogger<MoviesCont
     /// <returns>The requested movie details.</returns>
     /// <response code="200">Movie found.</response>
     /// <response code="404">Movie not found.</response>
-    [HttpGet("{movieId}")]
-    [MapToApiVersion("2.0")]
+    [HttpGet("{movieId}/details")]
+    //[MapToApiVersion("2.0")]
     public async Task<IActionResult> GetMovieV2(int movieId)
         => this.MapResult(await serviceManager.MovieService.GetDetailsByIdAsync(movieId));
 
