@@ -26,7 +26,7 @@ public class MoviesController(IServiceManager serviceManager, ILogger<MoviesCont
         var movie = await serviceManager.MovieService.GetDetailsByIdAsync(movieId);
 
         if (movie == null)
-            return NotFound($"No movie found with id: {movieId}");
+            return Problem(detail: $"No movie found with id: {movieId}", statusCode: StatusCodes.Status404NotFound);
 
         //Just testing Level 3 REST in one endpoint:
         var reviewsUrl = links.GetPathByAction(
