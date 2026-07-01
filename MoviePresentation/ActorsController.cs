@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -20,7 +19,7 @@ public class ActorsController(IServiceManager serviceManager) : ControllerBase
     /// <response code="404">Actor not found.</response>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
-        => this.MapResult(await serviceManager.ActorService.GetByIdAsync(id), $"No actor found with id: {id}");
+        => this.MapResult(await serviceManager.ActorService.GetByIdAsync(id));
 
 
     /// <summary>Creates a new actor.</summary>

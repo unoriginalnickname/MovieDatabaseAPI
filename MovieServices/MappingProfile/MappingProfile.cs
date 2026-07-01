@@ -35,12 +35,16 @@ public class MappingProfile : Profile
             .ForMember(d => d.BirthYear, opt => opt.MapFrom(s => s.BirthYear))
             .ForMember(d => d.Description, opt => opt.MapFrom(s => s.Description));
 
+
+
         CreateMap<UpdateActorDto, Actor>()
             .ForMember(d => d.Id, opt => opt.Ignore())
             .ForMember(d => d.Movies, opt => opt.Ignore());
         
         // Genre
         CreateMap<Genre, GenreDto>();
+        CreateMap<CreateGenreDto, Genre>();
+        CreateMap<UpdateGenreDto, Genre>();
 
         // Review
         CreateMap<Review, ReviewDto>();

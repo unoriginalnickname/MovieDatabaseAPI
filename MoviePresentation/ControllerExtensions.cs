@@ -45,13 +45,6 @@ public static class ResultMappingExtensions
         };
     }
 
-    public static IActionResult MapResult<T>(this ControllerBase controller, T? value, string notFoundMessage = "Not found")
-    {
-        return value is null
-            ? controller.NotFound(notFoundMessage)
-            : controller.Ok(value);
-    }
-
     public static IActionResult MapCreated<T>(
         this ControllerBase controller,
         ServiceResult<T> result,
