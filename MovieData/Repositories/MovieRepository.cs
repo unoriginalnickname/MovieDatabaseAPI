@@ -5,7 +5,10 @@ public class MovieRepository(MovieDbContext context) : IMovieRepository
     public IQueryable<Movie> Query()
         => context.Movies;
     public Task<Movie?> GetByIdAsync(int id)
-        => context.Movies.FirstOrDefaultAsync(x => x.Id == id);
+        => context.Movies
+            .Include(m => m.Actors)
+            .Include(m => m.Genres)
+            .FirstOrDefaultAsync(m => m.Id == id);
 
     public Task<Movie?> GetWithDetailsAsync(int id)
         => context.Movies
