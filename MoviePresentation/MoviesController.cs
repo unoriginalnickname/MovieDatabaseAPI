@@ -1,13 +1,9 @@
-using Asp.Versioning;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 
 [Route("api/[controller]")] 
-//[Route("api/v{version:apiVersion}/movies")]  // https://localhost:7259/api/v1/products
-//[ApiVersion("1.0")]
-//[ApiVersion("2.0")]
 [ApiController]
 public class MoviesController(IServiceManager serviceManager, ILogger<MoviesController> _logger, LinkGenerator links) : ControllerBase
 {
@@ -44,8 +40,6 @@ public class MoviesController(IServiceManager serviceManager, ILogger<MoviesCont
     public async Task<IActionResult> AddReview(int movieId, CreateReviewDto dto)
         => this.MapResult(await serviceManager.MovieRelationService.AddReviewAsync(movieId, dto));
 
-
-
     /// <summary>Replaces all actors for a movie.</summary>
     /// <param name="movieId">Movie ID.</param>
     /// <param name="dto">List of actor IDs to assign.</param>
@@ -54,7 +48,6 @@ public class MoviesController(IServiceManager serviceManager, ILogger<MoviesCont
     [HttpPut("{movieId}/actors")]
     public async Task<IActionResult> SetActors(int movieId, SetActorsDto dto)
         => this.MapResult(await serviceManager.MovieRelationService.SetActorsAsync(movieId, dto.ActorIds));
-
 
     /// <summary>Replaces all genres for a movie.</summary>
     /// <param name="movieId">Movie ID.</param>
@@ -100,14 +93,10 @@ public class MoviesController(IServiceManager serviceManager, ILogger<MoviesCont
         return this.MapResult(result);
     }
 
-
-
-
     /// <summary>Gets a movie by its ID.</summary>
     /// <param name="movieId">Movie ID.</param>
     /// <response code="200">Movie found.</response>
     /// <response code="404">Movie not found.</response>
-
     [HttpGet("{movieId}")]
     public async Task<IActionResult> GetMovieV1(int movieId)
     {
@@ -148,7 +137,6 @@ public class MoviesController(IServiceManager serviceManager, ILogger<MoviesCont
     /// <response code="200">Movie found.</response>
     /// <response code="404">Movie not found.</response>
     [HttpGet("{movieId}/details")]
-    //[MapToApiVersion("2.0")]
     public async Task<IActionResult> GetMovieV2(int movieId)
         => this.MapResult(await serviceManager.MovieService.GetDetailsByIdAsync(movieId));
 

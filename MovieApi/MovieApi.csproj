@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -14,6 +14,8 @@
 		<PropertyGroup>
 			<GenerateDocumentationFile>true</GenerateDocumentationFile>
 			<NoWarn>$(NoWarn);1591</NoWarn>
+			<UserSecretsId>13c987c6-b85d-4f34-b77f-28cd6144fcb6</UserSecretsId>
+			<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	
 	</PropertyGroup>
 
@@ -22,10 +24,18 @@
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.0.0" />
     <PackageReference Include="Asp.Versioning.OData.ApiExplorer" Version="8.2.1" />
     <PackageReference Include="Asp.Versioning.OpenApi" Version="10.0.0-rc.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+		<PackageReference Include="Microsoft.OpenApi" Version="2.7.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.16.7" />
     <PackageReference Include="Scalar.AspNetCore.Microsoft" Version="2.16.7" />
   </ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="LoginStuff\" />
+	</ItemGroup>
 </Project>

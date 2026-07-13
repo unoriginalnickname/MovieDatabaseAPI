@@ -1,7 +1,5 @@
 public interface IMovieService
 {
-    Task<ServiceResult<MovieDto>> GetByIdAsync(int id);
-
     Task<ServiceResult<MovieDetailsDto>> GetDetailsByIdAsync(int id);
 
     Task<ServiceResult<PagedResult<MovieDetailsDto>>> SearchAsync(MovieQuery query);

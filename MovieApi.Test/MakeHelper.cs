@@ -16,8 +16,8 @@ namespace MovieApi.Test
         /// <summary>
         /// Creates a MovieService instance with a real UnitOfWork and real AutoMapper.
         /// </summary>
-        public static MovieService CreateMovieServiceWithRealMapper(MovieDbContext ctx) =>
-            new(new UnitOfWork(ctx), CreateRealMapper());
+        //public static MovieService CreateMovieServiceWithRealMapper(MovieDbContext ctx) =>
+        //    new(new UnitOfWork(ctx), CreateRealMapper(),NullLoggerFactory.Instance);
 
         public static IMapper CreateRealMapper()
         {

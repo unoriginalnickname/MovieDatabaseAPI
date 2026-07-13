@@ -1,12 +1,58 @@
-using EFCorePracticeProject.Data;
 using EFCorePracticeProject.Mappings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Diagnostics;
-using System.Text.Json.Serialization;
-
+using System.Text;
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services
+    .AddIdentity<ApplicationUser, IdentityRole>(options =>
+    {
+        options.Password.RequiredLength = 8;
+        options.Password.RequireDigit = true;
+        options.Password.RequireUppercase = true;
+    })
+    .AddEntityFrameworkStores<MovieDbContext>()
+    .AddDefaultTokenProviders();
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme =
+            JwtBearerDefaults.AuthenticationScheme;
+
+        options.DefaultChallengeScheme =
+            JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters =
+            new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+
+                ValidIssuer = jwtSettings["Issuer"],
+                ValidAudience = jwtSettings["Audience"],
+
+                IssuerSigningKey =
+                    new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(
+                            jwtSettings["Secret"]!
+                        ))
+            };
+    });
+builder.Services.AddAuthorization();
+
 
 #region Controllers + JSON
 builder.Services.AddControllers()
@@ -72,6 +118,9 @@ app.Logger.LogInformation("Starting application");
 #region Middleware
 app.UseStatusCodePages();
 app.UseHttpsRedirection();
+app.UseAuthentication();
+
+
 app.UseAuthorization();
 app.UseMiddleware<ExceptionMiddleware>();
 app.MapControllers();
@@ -99,13 +148,6 @@ if (app.Environment.IsDevelopment())
 }
 #endregion
 
-#region Test endpoint
-app.MapGet("/Test", async (ILogger<Program> logger, HttpResponse response) =>
-{
-    logger.LogInformation("Test endpoint hit");
-    await response.WriteAsync("Testing");
-});
-#endregion
 
 app.Logger.LogInformation("App running");
 app.Run();

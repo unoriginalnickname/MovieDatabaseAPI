@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EFCorePracticeProject.Data
-{
     public static class SeedExtension
     {
         public static async Task SeedData(this WebApplication application)
@@ -130,4 +127,3 @@ namespace EFCorePracticeProject.Data
                 await context.SaveChangesAsync();
         }
     }
-}

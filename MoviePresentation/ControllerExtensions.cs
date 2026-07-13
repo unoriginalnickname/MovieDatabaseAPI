@@ -13,6 +13,12 @@ public static class ResultMappingExtensions
             ErrorTypeEnum.NotFound =>
                 controller.NotFound(result.Error),
 
+            //should we do these types of responses insteaD=?
+            //return Results.Problem(
+            // detail: "The order ID provided is invalid.",
+            // statusCode: StatusCodes.Status400BadRequest,
+            // title: "Invalid Request"
+
             ErrorTypeEnum.Validation =>
                 controller.BadRequest(result.Error),
 
@@ -23,7 +29,6 @@ public static class ResultMappingExtensions
                 controller.StatusCode(StatusCodes.Status500InternalServerError, result.Error)
         };
     }
-
     public static IActionResult MapResult(this ControllerBase controller, ServiceResult result)
     {
         if (result.Success)
@@ -39,7 +44,6 @@ public static class ResultMappingExtensions
 
             ErrorTypeEnum.Conflict =>
                 controller.Conflict(result.Error),
-
             _ =>
                 controller.StatusCode(StatusCodes.Status500InternalServerError, result.Error)
         };

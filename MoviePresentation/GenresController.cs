@@ -13,9 +13,6 @@ public class GenresController(IServiceManager serviceManager) : ControllerBase
     public async Task<IActionResult> GetAll([FromQuery] GenreQuery query)
         => this.MapResult(await serviceManager.GenreService.GetAllAsync(query));
 
-
-
-
     /// <summary>Gets a genre by ID.</summary>
     /// <param name="genreId">Genre ID.</param>
     /// <returns>The requested genre.</returns>
@@ -25,8 +22,6 @@ public class GenresController(IServiceManager serviceManager) : ControllerBase
     public async Task<IActionResult> GetById(int genreId)
         => this.MapResult(await serviceManager.GenreService.GetByIdAsync(genreId));
 
-
-
     /// <summary>Creates a new genre.</summary>
     /// <param name="dto">Genre creation data.</param>
     /// <returns>The created genre.</returns>
@@ -34,7 +29,6 @@ public class GenresController(IServiceManager serviceManager) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateGenreDto dto)
         => this.MapResult(await serviceManager.GenreService.CreateAsync(dto));
-
 
     /// <summary>Updates an existing genre.</summary>
     /// <param name="genreId">Genre ID.</param>
@@ -45,7 +39,6 @@ public class GenresController(IServiceManager serviceManager) : ControllerBase
     [HttpPut("{genreId}")]
     public async Task<IActionResult> Update(int genreId, UpdateGenreDto dto)
         => this.MapResult(await serviceManager.GenreService.UpdateAsync(genreId, dto));
-
 
     /// <summary>Deletes a genre.</summary>
     /// <param name="genreId">Genre ID.</param>

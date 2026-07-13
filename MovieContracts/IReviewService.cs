@@ -8,9 +8,5 @@
         int movieId,
         PagingQuery query);
 
-    Task<ServiceResult<ReviewDto>> CreateAsync(CreateReviewDto dto);
-
     Task<ServiceResult> DeleteAsync(int reviewId);
-
-    Task<ServiceResult> AddReviewAsync(int movieId, CreateReviewDto dto);
 }
