@@ -110,7 +110,7 @@ builder.Services.AddProblemDetails(options =>
     };
 });
 #endregion
-
+//todo
 var app = builder.Build();
 
 app.Logger.LogInformation("Starting application");
