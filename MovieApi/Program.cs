@@ -7,8 +7,13 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Diagnostics;
 using System.Text;
-var builder = WebApplication.CreateBuilder(args);
 
+
+
+
+
+var builder = WebApplication.CreateBuilder(args);
+// Investigate, modelcreation, on modelcreation.
 
 builder.Services
     .AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -116,6 +121,8 @@ var app = builder.Build();
 app.Logger.LogInformation("Starting application");
 
 #region Middleware
+app.UseCors((o) => o.AllowAnyOrigin());
+
 app.UseStatusCodePages();
 app.UseHttpsRedirection();
 app.UseAuthentication();
@@ -124,7 +131,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionMiddleware>();
 app.MapControllers();
+
 #endregion
+
 
 #region Root redirect
 app.MapGet("/", () => Results.Redirect("/scalar"));
